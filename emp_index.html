@@ -8,45 +8,130 @@
     <div class="row">
         <div class="col md-12">
           <div class="jumbotron p-3">
-              <h2><b>Leave Management Syetem(LMS)</b> <button type="button" class="btn btn-success float-right" data-toggle="" data-target="">Add New Employee</button></h2>
-                <div class="alert alert-success alert-dismissible" role="alert">
+              <h4><b>Leave Management System(LMS)</b> <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">Add New Employee</button></h4>
+              {% with messages = get_flashed_messages() %}
+			  {% if messages %}
+			  {% for message in messages %}
+			  <div class="alert alert-success alert-dismissible" role="alert">
 				  <button type="button" class="close" data-dismiss="alert" aria-label="close">
 					  <span aria-hidden="true">X</span>
 				  </button>
-				
+				{{message}}
 			  </div>
 
+			  {% endfor %}
+			  {% endif %}
+			  {% endwith %}
 			  <table class="table table-hover table-dark">
                   <tr>
-					  <th>Employee ID</th>
-                      <th>Employee Name</th>
-                      <th>Designation</th>
+					  <th>Emp_Id</th>
+                      <th>Emp_Name</th>
+                      <th>Desig</th>
 					  <th>Gender</th>
-                      <th>EL_Leave</th>
-					  <th>Leave_Taken</th>
-					  <th>Remaining_Leave</th>
-                      <th>Reporting To</th>
+                      <th>E_leave</th>
+					  <th>Leave_taken</th>
+					  <th>Leave_bal</th>
+                      <th>Rep_to</th>
+					  <th>Action</th>
                    </tr>
-				  
-                  <tr>
+				                    <tr>
                       <td>1</td>
-					  <td>raja</td>
-                      <td>sr</td>
+					  <td>suresh</td>
+                      <td>dev</td>
 					  <td>male</td>
                       <td>5</td>
 					  <td>0</td>
-					  <td>5</td>
+					  <td>0</td>
                       <td>manager</td>
+					  <td>
+                          <a href="/update" class="btn btn-warning btx-xs" data-toggle="modal" data-target="#modaledit">Edit</a>
+                          <a href="/delete" class="btn btn-danger btx-xs" onclick="return confirm('Are you sure want to delete?')">Delete</a>
+                      </td>
                   </tr>
+				  <!--modal edit include here-->
+					
+				  <!--modal edit closed here-->
 				  
               </table>
           </div>
-			
+			<!--modal add include here-->
+			<div id="mymodal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Add Employee</h4>
+						</div>
+
+						<div class="modal-body">
+							<form name="add_form" action="{{url_for('insert')}}" method="POST">
+								<!--<div class="form-group">
+									<label>Emp_id:</label>
+									<input type="number" class="form-control" name="emp_id" required="1">
+								</div>-->
+
+								<div class="form-group">
+									<label>Emp_name:</label>
+									<input type="text" class="form-control" name="emp_name" required="1">
+								</div>
+
+								<div class="form-group">
+									<label>Desig:</label>
+									<input type="text" class="form-control" name="desig" required="1">
+								</div>
+								
+								<div class="form-group">
+									<label>Gender:</label>
+									<input type="text" class="form-control" name="gender" required="1">
+								</div>
+								
+								<div class="form-group">
+									<label>E_leave:</label>
+									<input type="number" placeholder="Number 1-5" class="form-control" name="el_leave" required="1">
+									<div class="valid-feedback">Valid.</div>
+									<div class="invalid-feedback">Please fill out this field.</div>
+								</div>
+
+								<div class="form-group">
+									<label>Leave_taken:</label>
+									<input type="number" class="form-control" name="leave_taken" required="1">
+								</div>
+
+								<div class="form-group">
+									<label>Leave_bal:</label>
+									<input type="number" class="form-control" name="remain_leave" required="1">
+								</div>
+																
+								<div class="form-group">
+									<label>Rep_to:</label>
+									<input type="text" class="form-control" name="reporting_to" required="1">
+								</div>
+
+								<div class="form-group">
+									<button class="btn btn-primary" type="submit">Add Employee</button>
+
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--modal add closed here-->
         </div>
     </div>
 </div>
 
-
+<script>
+function validateForm() {
+  var x = document.forms["add_form"]["el_leave"].value;
+  if (x > 5) {
+    alert("Number should 1-5");
+    return false;
+  }
+}
+</script>
 
 
 {% endblock %}
