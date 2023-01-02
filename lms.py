@@ -142,6 +142,33 @@ def delete(emp_id):
     flash("Customer Data Deleted Successfully")
     return redirect(url_for('admin_login'))
 
+@app.route('/employees/assign/<int:id>', methods=['GET', 'POST'])
+def assign_employee(id):
+    """
+    Assign a department, a paygrade and a role to an employee
+    """
+    employee = empdata.query.get_or_404(id)
+
+    # prevent admin from being assigned a department or role
+    if employee.is_admin:
+        abort(403)
+
+    form = EmployeeAssignForm(obj=employee)
+    if form.validate_on_submit():
+        employee.department = form.department.data
+        employee.role = form.role.data
+        employee.grade = form.grade.data
+        db.session.add(employee)
+        db.session.commit()
+        flash('You have successfully assigned a department, paygrade and a role.')
+
+        # redirect to the roles page
+        return redirect(url_for('admin.list_employees'))
+
+    return render_template('admin/employees/employee.html',
+                           employee=employee, form=form,
+                           title='Assign Employee')
+
 # main function
 if __name__ == "__main__":
     """run flask application"""
